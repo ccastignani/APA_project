@@ -1,9 +1,10 @@
 
 import numpy as np
+from collections import defaultdict
 
 class Compound:
 
-    def __init__(self, broad_id, name,featureVector):
+    def __init__(self, broad_id, featureVector):
         self.id = broad_id
         self.featureVector = featureVector
 
@@ -33,33 +34,35 @@ def parse_file(imaging_profile, feature_names_file, feature_list= ["Cells_AreaSh
 		if i in feature_index:
 			index_list.append(first_line.strip().split('\t').index(i))
 
-	all_compounds =[]
+	all_compounds_dict = defaultdict(dict)
 	with open(imaging_profile) as fp:
-		for line in fp.readlines():
+		for line in fp.readlines()[1:]:
 			compound_vector = []
-			for i in index_list:
-				compound_vector.append(line.strip().split('\t')[i])
-			
-			compound = Compound(line.strip().split('\t')[0], np.array(compound_vector))
+			if line.strip().split('\t')[0] != 'DMSO':
+				for i in index_list:
+					compound_vector.append(float(line.strip().split('\t')[i]))
+				
+				if line.strip().split('\t')[0] in all_compounds_dict.keys():
+					mean_feature_vector = (all_compounds_dict[line.strip().split('\t')[0]].featureVector + np.array(compound_vector))/2
 
-			all_compounds.append(compound)
-
-	return all_compounds
+					all_compounds_dict[line.strip().split('\t')[0]] = Compound(line.strip().split('\t')[0], mean_feature_vector)
 
 
+				else:
+					all_compounds_dict[line.strip().split('\t')[0]] = Compound(line.strip().split('\t')[0], np.array(compound_vector))
+
+	return all_compounds_dict
 
 
 
 
 if __name__ == '__main__':
 	
-	imaging_profile= "/Users/carla/Downloads/Broad.HG005032.ProfilingData/imaging/cdrp.imaging.profiles_test.txt"
+	imaging_profile= "/Users/carla/Downloads/Broad.HG005032.ProfilingData/imaging/cdrp.imaging.profiles.txt"
 	feature_names_file= "/Users/carla/Downloads/Broad.HG005032.ProfilingData/imaging/cdrp.imaging.feature.names.txt"
 
-	compounds_list = parse_file(imaging_profile, feature_names_file)
-	print(compounds_list)
-	for i in compounds_list:
-		print(i.name)
+	all_compounds_dict = parse_file(imaging_profile, feature_names_file)
+	print(all_compounds_dict.keys())
 
 
 
