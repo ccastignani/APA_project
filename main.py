@@ -2,7 +2,7 @@
 
 class Compound:
 
-    def __init__(self, id, name,featureVector):
+    def __init__(self, id, name, featureVector):
         self.id = id
         self.name = name
         self.featureVector = featureVector
@@ -14,21 +14,45 @@ class Compound:
         return
 
 
+class Node:
+
+    def __init__(self, compound_index, left_child, right_child):
+        self.compound_index = compound_index
+        self.left_child = left_child
+        self.right_child = right_child
+
 class KDtree:
-    """
-    Implementation of a KDtree
-    """
-    global root
+    """ Implementation of a KDtree """
 
-    def __init__(self, root, *argv):
-        self.root = root
-        self.features = *argv
+    def __init__(self, compound_dict):
+        self.compound_dict = compound_dict
+        self.compound_matrix = self.create_compound_matrix(compound_dict)
+        self.root = self.build_tree(self.compound_matrix)
 
-    def insert(self, node):
+    def create_compound_matrix():
         return
 
-    def remove(self, node):
-        return
+    def build_tree(self, compound_matrix, depth=0):
+
+        # Last case (Leaf nodes)
+        if not compound_matrix:
+            return None
+
+        # Length of dimensions, equal for all the elements, pick the first one
+        k = len(compound_matrix[0])
+        # Check which is the current dimension being considered
+        current_dimension = depth % k
+        # Sort the elements based on the current_dimension
+        compound_matrix.sort(key=lambda x: x[current_dimension])
+        median = len(compound_matrix) // 2
+
+        # Create node and construct subtrees
+        node = Node()
+        node.compound_index = compound_matrix[median]
+        node.left_child = self.build_tree(compound_matrix[:median], depth + 1)
+        node.right_child = self.build_tree(compound_matrix[median + 1:],
+                                           depth + 1)
+        return node
 
     def group(self, x, d, k, *argv):
         return
