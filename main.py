@@ -19,7 +19,7 @@ class Compound:
 
 class Node:
 
-    def __init__(self, compound_id, left_child, right_child):
+    def __init__(self, compound_id = None, left_child = None, right_child = None):
         self.compound_id = compound_id
         self.left_child = left_child
         self.right_child = right_child
@@ -32,12 +32,14 @@ class KDtree:
         self.compound_matrix = self.create_compound_matrix(compound_dict)
         self.root = self.build_tree(self.compound_matrix)
 
-    def create_compound_matrix(compound_dict):
+
+    def create_compound_matrix(self, compound_dict):
         compound_matrix = []
         for key, value in compound_dict.items():
             row = value.featureVector
-            row.append(key)
+            row = np.append(row, np.array(key))
             compound_matrix.append(row)
+            #print(row)
         return compound_matrix
 
     def build_tree(self, compound_matrix, depth=0):
@@ -52,6 +54,8 @@ class KDtree:
         current_dimension = depth % k
         # Sort the elements based on the current_dimension
         compound_matrix.sort(key=lambda x: x[current_dimension])
+        #print(compound_matrix)
+        #print("----")
         median = len(compound_matrix) // 2
 
         # Create node and construct subtrees
@@ -65,16 +69,20 @@ class KDtree:
     def print_tree(self):
         nodes = [self.root]
         while len(nodes) != 0:
-            current_node = nodes.pop()
-            print(current_node.compound_id)
-            nodes.append(current_node.left_child)
-            nodes.append(current_node.right_child)
+            current_node = nodes.pop(0)
+            if(current_node is not None):
+                print(current_node.compound_id)
+                print(self.compound_dict[current_node.compound_id].featureVector)
+                nodes.append(current_node.left_child)
+                nodes.append(current_node.right_child)
+            else:
+                print("None")
 
 
 
 
 def parse_file(imaging_profile, feature_names_file, feature_list= ["Cells_AreaShape_Area", "Cells_AreaShape_Compactness", "Cells_AreaShape_Eccentricity", "Cells_AreaShape_Perimeter", "Cytoplasm_AreaShape_Area", "Cytoplasm_AreaShape_Eccentricity", "Cytoplasm_AreaShape_Perimeter", "Nuclei_AreaShape_Area", "Nuclei_AreaShape_Eccentricity", "Nuclei_AreaShape_Perimeter"]):
-	
+
 	f = open(feature_names_file, "r")
 
 	feature_index = []
@@ -100,7 +108,7 @@ def parse_file(imaging_profile, feature_names_file, feature_list= ["Cells_AreaSh
 			if line.strip().split('\t')[0] != 'DMSO':
 				for i in index_list:
 					compound_vector.append(float(line.strip().split('\t')[i]))
-				
+
 				if line.strip().split('\t')[0] in all_compounds_dict.keys():
 					mean_feature_vector = (all_compounds_dict[line.strip().split('\t')[0]].featureVector + np.array(compound_vector))/2
 
@@ -116,11 +124,10 @@ def parse_file(imaging_profile, feature_names_file, feature_list= ["Cells_AreaSh
 
 
 if __name__ == '__main__':
-	
-	imaging_profile= "/Users/carla/Downloads/Broad.HG005032.ProfilingData/imaging/cdrp.imaging.profiles.txt"
-	feature_names_file= "/Users/carla/Downloads/Broad.HG005032.ProfilingData/imaging/cdrp.imaging.feature.names.txt"
-
-	all_compounds_dict = parse_file(imaging_profile, feature_names_file)
-	print(all_compounds_dict.keys())
-
-
+    imaging_profile= "./test_data/profiles.txt"
+    feature_names_file= "./test_data/features.txt"
+    test_features =["Cells_AreaShape_Area", "Cells_AreaShape_Compactness", "Cells_AreaShape_Eccentricity"]
+    all_compounds_dict = parse_file(imaging_profile, feature_names_file,test_features )
+    KDtree = KDtree(all_compounds_dict)
+    KDtree.print_tree()
+	#print(all_compounds_dict.keys())
