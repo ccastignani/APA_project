@@ -4,6 +4,7 @@ from collections import defaultdict
 
 class Compound:
 
+
     def __init__(self, broad_id, featureVector):
         self.id = broad_id
         self.featureVector = featureVector
@@ -13,6 +14,63 @@ class Compound:
     #     # for the calculation of the distance
     #     # Distance: eucledian
     #     return
+
+
+
+class Node:
+
+    def __init__(self, compound_id, left_child, right_child):
+        self.compound_id = compound_id
+        self.left_child = left_child
+        self.right_child = right_child
+
+class KDtree:
+    """ Implementation of a KDtree """
+
+    def __init__(self, compound_dict):
+        self.compound_dict = compound_dict
+        self.compound_matrix = self.create_compound_matrix(compound_dict)
+        self.root = self.build_tree(self.compound_matrix)
+
+    def create_compound_matrix(compound_dict):
+        compound_matrix = []
+        for key, value in compound_dict.items():
+            row = value.featureVector
+            row.append(key)
+            compound_matrix.append(row)
+        return compound_matrix
+
+    def build_tree(self, compound_matrix, depth=0):
+
+        # Last case (Leaf nodes)
+        if not compound_matrix:
+            return None
+
+        # Length of dimensions, equal for all the elements, pick the first one
+        k = len(compound_matrix[0])-1
+        # Check which is the current dimension being considered
+        current_dimension = depth % k
+        # Sort the elements based on the current_dimension
+        compound_matrix.sort(key=lambda x: x[current_dimension])
+        median = len(compound_matrix) // 2
+
+        # Create node and construct subtrees
+        node = Node()
+        node.compound_id = compound_matrix[median][-1]
+        node.left_child = self.build_tree(compound_matrix[:median], depth + 1)
+        node.right_child = self.build_tree(compound_matrix[median + 1:],
+                                           depth + 1)
+        return node
+
+    def print_tree(self):
+        nodes = [self.root]
+        while len(nodes) != 0:
+            current_node = nodes.pop()
+            print(current_node.compound_id)
+            nodes.append(current_node.left_child)
+            nodes.append(current_node.right_child)
+
+
 
 
 def parse_file(imaging_profile, feature_names_file, feature_list= ["Cells_AreaShape_Area", "Cells_AreaShape_Compactness", "Cells_AreaShape_Eccentricity", "Cells_AreaShape_Perimeter", "Cytoplasm_AreaShape_Area", "Cytoplasm_AreaShape_Eccentricity", "Cytoplasm_AreaShape_Perimeter", "Nuclei_AreaShape_Area", "Nuclei_AreaShape_Eccentricity", "Nuclei_AreaShape_Perimeter"]):
@@ -28,6 +86,7 @@ def parse_file(imaging_profile, feature_names_file, feature_list= ["Cells_AreaSh
 
 	with open(imaging_profile) as fp:
 		first_line = fp.readline()
+
 
 	index_list= []
 	for i in first_line.strip().split('\t'):
@@ -65,22 +124,3 @@ if __name__ == '__main__':
 	print(all_compounds_dict.keys())
 
 
-
-# class KDtree:
-#     """
-#     Implementation of a KDtree
-#     """
-#     global root
-
-#     def __init__(self, root, *argv):
-#         self.root = root
-#         self.features = *argv
-
-#     def insert(self, node):
-#         return
-
-#     def remove(self, node):
-#         return
-
-#     def group(self, x, d, k, *argv):
-#         return
