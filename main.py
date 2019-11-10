@@ -78,6 +78,27 @@ class KDtree:
             else:
                 print("None")
 
+    def group(self, node, d, k):
+
+        nodes = [self.root]
+        while len(nodes) != 0:
+            current_node = nodes.pop(0)
+            if(current_node is not None):
+                print(current_node.compound_id)
+                print(self.compound_dict[current_node.compound_id].featureVector)
+
+                if not self.KDcompare(node.left_child, node, d, True) == "RIGHT":
+                    nodes.append(current_node.left_child)
+                if not self.KDcompare(node.right_child, node,d) == "LEFT":
+                    nodes.append(current_node.right_child)
+
+
+    def KDcompare(self, child, node, d, subtract = False):
+
+        return child
+
+
+
 
 
 
@@ -119,6 +140,8 @@ def parse_file(imaging_profile, feature_names_file, feature_list= ["Cells_AreaSh
 					all_compounds_dict[line.strip().split('\t')[0]] = Compound(line.strip().split('\t')[0], np.array(compound_vector))
 
 	return all_compounds_dict
+
+
 
 
 
