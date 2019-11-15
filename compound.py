@@ -4,18 +4,31 @@ from collections import defaultdict
 import utils
 
 class Compound:
-    """ """
-    def __init__(self, broad_id, featureVector):
-        """ """
-        self.id = broad_id
-        self.featureVector = featureVector
+    """ Class representing a compound """
+
+    def __init__(self, broad_id, feature_vector):
+        """ Creator of a compound """
+        self.broad_id = broad_id
+        self.feature_vector = feature_vector
+
+    def __str__(self):
+        """ Magic method to print a node """
+        return str(self.feature_vector)
+
+    def get_dimensions(self):
+        """ 'Interface method' to be compatible with kd tree """
+        return self.feature_vector
+
+    # TODO: implement this function
+    def get_features(self, feature_list=["all"]):
+        """ Method that returns the features listed in argv """
+        pass
 
     def distance(self, x, *argv):
-        """ """
+        """ Return the distance among two compounds """
         # argv is a list of the names of the features which have to be used
         # for the calculation of the distance
-        # Distance: eucledian
-        pass
+        return utils.euclidean_distance(self.get_features(argv), x.get_features(argv))
 
     @staticmethod
     def parse_file(imaging_profile, feature_names_file, feature_list = [
@@ -30,7 +43,7 @@ class Compound:
             "Nuclei_AreaShape_Eccentricity", 
             "Nuclei_AreaShape_Perimeter"
             ]):
-        """ """
+        """ Static method that returns a dictionary of compounds from a file """
 
         f = open(feature_names_file, "r")
         
@@ -40,10 +53,8 @@ class Compound:
             if line[1] in feature_list:
                 feature_index.append(line[0])
 
-
         with open(imaging_profile) as fp:
             first_line = fp.readline()
-
 
         index_list= []
         for i in first_line.strip().split('\t'):
@@ -59,11 +70,8 @@ class Compound:
                         compound_vector.append(float(line.strip().split('\t')[i]))
 
                     if line.strip().split('\t')[0] in all_compounds_dict.keys():
-                        mean_feature_vector = (all_compounds_dict[line.strip().split('\t')[0]].featureVector + np.array(compound_vector))/2
-
+                        mean_feature_vector = (all_compounds_dict[line.strip().split('\t')[0]].feature_vector + np.array(compound_vector))/2
                         all_compounds_dict[line.strip().split('\t')[0]] = Compound(line.strip().split('\t')[0], mean_feature_vector)
-
-
                     else:
                         all_compounds_dict[line.strip().split('\t')[0]] = Compound(line.strip().split('\t')[0], np.array(compound_vector))
 

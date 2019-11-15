@@ -29,12 +29,12 @@ if __name__ == '__main__':
     options = parser.parse_args()
 
     imaging_profile = options.imaging_profile
-    feature_names_file= options.featues_name
+    feature_names_file = options.featues_name
     feature_list = options.feature_list
     
     # Read files
     compounds_dict = Compound.parse_file(imaging_profile, feature_names_file, feature_list)
     
-    # Create and print kd tree
+    # Create and print kd tree in inorder
     kd_tree = KDTree(compounds_dict)
     kd_tree.print_tree()
