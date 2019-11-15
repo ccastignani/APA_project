@@ -6,6 +6,8 @@ import utils
 class Compound:
     """ Class representing a compound """
 
+    feature_list = []
+
     def __init__(self, broad_id, feature_vector):
         """ Creator of a compound """
         self.broad_id = broad_id
@@ -17,12 +19,22 @@ class Compound:
 
     def get_dimensions(self):
         """ 'Interface method' to be compatible with kd tree """
-        return self.feature_vector
+        return self.get_features()
 
-    # TODO: implement this function
-    def get_features(self, feature_list=["all"]):
+    def get_features(self, feature_list=None):
         """ Method that returns the features listed in argv """
-        pass
+        if feature_list is None or not feature_list:
+            return self.feature_vector
+        else:
+            features_requested = []
+            for feature in feature_list:
+                try:
+                    feature_index = Compound.feature_list.index(feature)
+                    features_requested.append(self.feature_vector[feature_index])
+                except ValueError as e:
+                    print("Unrecognized feature: %s" %e)
+            return features_requested
+
 
     def distance(self, x, *argv):
         """ Return the distance among two compounds """
@@ -44,6 +56,8 @@ class Compound:
             "Nuclei_AreaShape_Perimeter"
             ]):
         """ Static method that returns a dictionary of compounds from a file """
+
+        Compound.feature_list = feature_list
 
         f = open(feature_names_file, "r")
         

@@ -34,7 +34,22 @@ if __name__ == '__main__':
     
     # Read files
     compounds_dict = Compound.parse_file(imaging_profile, feature_names_file, feature_list)
-    
+
+    # Get two compounds and print the requested dimensions and distance
+    compound_one = compounds_dict["BRD-K98301999-001-01-1"]
+    compound_two = compounds_dict["BRD-K05686172-001-01-6"]
+
+    requested_features = [
+        "Cells_AreaShape_Area",
+        "Cells_AreaShape_Eccentricity"
+    ]
+
+    print("=== Distance from two compounds ===")
+    print("Compound one: %s - %s" %(compound_one.broad_id, compound_one.get_features(requested_features)))
+    print("Compound two: %s - %s" %(compound_two.broad_id, compound_two.get_features(requested_features)))
+    print("Distance: %s" %compound_one.distance(compound_two, "Cells_AreaShape_Area", "Cells_AreaShape_Eccentricity"))
+
+    print("=== Creation of KD Tree and print in inorder ===")
     # Create and print kd tree in inorder
     kd_tree = KDTree(compounds_dict)
     kd_tree.print_tree()

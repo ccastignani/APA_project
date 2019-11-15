@@ -1,4 +1,5 @@
-# TODO: implement this function
-def euclidean_distance(point_a, point_b):
+import math
+
+def euclidean_distance(point_x, point_y):
     """ Method to calculate euclidean distance between two points in n-dimensions """
-    pass
+    return math.sqrt(sum([(a - b) ** 2 for a, b in zip(point_x, point_y)]))
