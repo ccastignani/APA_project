@@ -11,6 +11,7 @@ class Compound:
     def __init__(self, broad_id, feature_vector):
         """ Creator of a compound """
         self.broad_id = broad_id
+        # TODO: normalize feature vector?? Because dimensions may vary some magnitude sacales
         self.feature_vector = feature_vector
 
     def __str__(self):
