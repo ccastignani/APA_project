@@ -8,7 +8,7 @@ class Compound:
 
     feature_list = []
 
-    def __init__(self, broad_id, feature_vector):
+    def __init__(self, broad_id, feature_vector, feature_list=None):
         """ Creator of a compound """
         self.broad_id = broad_id
         # TODO: normalize feature vector?? Because dimensions may vary some magnitude sacales

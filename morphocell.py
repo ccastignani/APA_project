@@ -10,22 +10,17 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--imaging_profile',
                         dest="imaging_profile",
                         action="store",
-                        default="./test_data/profiles.txt",
+                        required=True,
                         help="The imaging profile file")
     parser.add_argument('-f', '--featues_name',
                         dest="featues_name",
                         action="store",
-                        default="./test_data/features.txt",
+                        required=True,
                         help="The featues name file")
     parser.add_argument('-l', '--featue_list',
                         dest="feature_list",
                         action="store",
                         nargs="*",
-                        default=[
-                            "Cells_AreaShape_Area", 
-                            "Cells_AreaShape_Compactness", 
-                            "Cells_AreaShape_Eccentricity"
-                            ],
                         help="The featues list to evaluate")
 
     options = parser.parse_args()
@@ -35,7 +30,7 @@ if __name__ == '__main__':
     feature_list = options.feature_list
     
     # Read files
-    compounds_dict = Compound.parse_file(imaging_profile, feature_names_file, feature_list)
+    compounds_dict = Compound.parse_file(imaging_profile, feature_names_file)
 
     # Get two compounds and print the requested dimensions and distance
     compound_one = compounds_dict["BRD-K98301999-001-01-1"]
@@ -54,12 +49,12 @@ if __name__ == '__main__':
     print("=== Creation of KD Tree and print in inorder ===")
     # Create and print kd tree in inorder
     kd_tree = KDTree(compounds_dict)
-    kd_tree.print_tree()
+    #kd_tree.print_tree()
 
     print("=== Group function over a compound ===")
     print("Compound: %s - %s" %(compound_one.broad_id, compound_one.get_features()))
     print("Nearest neighbours:")
-    nearest_neighbour = kd_tree.group(compound_one, 5500, 5)
+    nearest_neighbour = kd_tree.group(compound_one, 1500, 5)
     for compound in nearest_neighbour:
         print("%s - %s" %(compound.get_id(), compound.get_features()))
 
