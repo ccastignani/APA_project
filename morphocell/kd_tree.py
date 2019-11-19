@@ -71,7 +71,7 @@ class KDTree:
             result_nodes.append(self.data_dictionary[node[0]])
         return result_nodes
 
-    def nearest_neighbor(self, node_id, d, dimension_names):
+    def nearest_neighbor(self, node_id, d, dimension_names=None):
         node_data = self.data_dictionary[node_id].get_dimensions()
         min_values = node_data - d
         max_values = node_data + d
@@ -85,7 +85,7 @@ class KDTree:
                 data_current_node = node_data = self.data_dictionary[current_node[0].id].get_dimensions()
                 if (data_current_node >= min_values).all() and (data_current_node <= max_values).all():
                     nodes_to_add = [current_node[0].left_child, current_node[0].right_child]
-                    distance_to_node = self.data_dictionary[node_id].distance(self.data_dictionary[current_node[0].id], dimension_names)
+                    distance_to_node = self.data_dictionary[node_id].distance(self.data_dictionary[current_node[0].id])
                     if distance_to_node <= d:
                         result_node_id.append((current_node[0].id, distance_to_node))
                     if self.compare(min_values, data_current_node, current_node[1]) == "RIGHT":
