@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
+
 import argparse
 
-from compound import Compound
-from kd_tree import KDTree
+from morphocell.compound import Compound
+from morphocell.kd_tree import KDTree
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="This programs creates a KD tree from imaging profiling files.")
@@ -55,7 +57,7 @@ if __name__ == '__main__':
     kd_tree.print_tree()
 
     print("=== Group function over a compound ===")
-    print("Compound: %s - %s" %(compound_one.broad_id, compound_one.get_features(requested_features)))
+    print("Compound: %s - %s" %(compound_one.broad_id, compound_one.get_features()))
     print("Nearest neighbours:")
     nearest_neighbour = kd_tree.group(compound_one, 5500, 5)
     for compound in nearest_neighbour:

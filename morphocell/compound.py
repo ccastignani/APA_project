@@ -1,7 +1,7 @@
 import numpy as np
 from collections import defaultdict
 
-import utils
+import morphocell.utils as utils
 
 class Compound:
     """ Class representing a compound """
