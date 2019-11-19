@@ -53,3 +53,12 @@ if __name__ == '__main__':
     # Create and print kd tree in inorder
     kd_tree = KDTree(compounds_dict)
     kd_tree.print_tree()
+
+    print("=== Group function over a compound ===")
+    print("Compound: %s - %s" %(compound_one.broad_id, compound_one.get_features(requested_features)))
+    print("Nearest neighbours:")
+    nearest_neighbour = kd_tree.group(compound_one, 5500, 5)
+    for compound in nearest_neighbour:
+        print("%s - %s" %(compound.get_id(), compound.get_features()))
+
+

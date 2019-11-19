@@ -36,9 +36,9 @@ class KDTree:
 
         # Length of dimensions minus 1, as we added the id as another dimension in the matrix
         k = len(data_matrix[0])-1
-
         # Check the current dimension to be evaluated
         current_dimension = depth % k
+
         # Sort the elements based on the current_dimension and get the median
         data_matrix.sort(key=lambda x: x[current_dimension])
         median = len(data_matrix) // 2
@@ -61,25 +61,52 @@ class KDTree:
             print("%s - %s" %(node.id, self.data_dictionary[node.id]))
             self.__print_tree_i(node.right_child)
 
-    # TODO: this is only a draft version
-    def group(self, node, d, k):
+    def group(self, x, d, k, *argv):
         """ Method to retrieve the k nearest neighbours at most d distance """
-        nodes = [self.root]
-        while len(nodes) != 0:
-            current_node = nodes.pop(0)
-            if(current_node is not None):
-                print(current_node.id)
-                print(self.data_dictionary[current_node.id])
+        near_nodes_list = self.nearest_neighbor(x.get_id(), d)
+        near_nodes_list.sort(key=lambda x: x[1])
 
-                if not self.compare(node.left_child, node, d, True) == "RIGHT":
-                    nodes.append(current_node.left_child)
-                if not self.compare(node.right_child, node,d) == "LEFT":
-                    nodes.append(current_node.right_child)
+        result_nodes = []
+        for node in near_nodes_list[:k]:
+            result_nodes.append(self.data_dictionary[node[0]])
+        return result_nodes
 
-    # TODO: this is only a draft version
-    def compare(self, child, node, d, subtract = False):
-        """ Method to compare two nodes """
-        return child
+    def nearest_neighbor(self, node_id, d):
+        node_data = self.data_dictionary[node_id].get_dimensions()
+        min_values = node_data - d
+        max_values = node_data + d
 
+        result_node_id = []
 
+        node_queue = [(self.root,0)]
+        while node_queue:
+            current_node = node_queue.pop(0)
+            if current_node[0] is not None:
+                data_current_node = node_data = self.data_dictionary[current_node[0].id].get_dimensions()
+                if (data_current_node >= min_values).all() and (data_current_node <= max_values).all():
+                    nodes_to_add = [current_node[0].left_child, current_node[0].right_child]
+                    distance_to_node = self.data_dictionary[node_id].distance(self.data_dictionary[current_node[0].id])
+                    if distance_to_node <= d:
+                        result_node_id.append((current_node[0].id, distance_to_node))
+                    if self.compare(min_values, data_current_node, current_node[1]) == "RIGHT":
+                        #Discard left path
+                        nodes_to_add[0] = None
+                    if self.compare(max_values, data_current_node, current_node[1]) == "LEFT":
+                        #Discard right path
+                        nodes_to_add[1] = None
+                    for child in nodes_to_add:
+                        if child is not None:
+                            node_queue.append((child, current_node[1]+1))
+        return result_node_id
+
+    def compare(self, data_node_p, data_node_q, depth):
+        """ Method that returns child of node_q that belongs node_p """
+        # Length of dimensions minus 1, as we added the id as another dimension in the matrix
+        k = len(self.data_matrix[0])-1
+        # Check the current dimension to be evaluated
+        current_dimension = depth % k
+
+        if data_node_p[current_dimension] < data_node_q[current_dimension]:
+            return "RIGTH"
+        return "LEFT"
 

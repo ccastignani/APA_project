@@ -16,8 +16,12 @@ class Compound:
 
     def __str__(self):
         """ Magic method to print a node """
-        return str(self.feature_vector)
+        return "%s - %s" %(self.broad_id,str(self.feature_vector))
 
+    def get_id(self):
+        """ 'Interface method' to be compatible with kd tree """
+        return self.broad_id   
+    
     def get_dimensions(self):
         """ 'Interface method' to be compatible with kd tree """
         return self.get_features()
