@@ -30,7 +30,7 @@ if __name__ == '__main__':
     feature_list = options.feature_list
     
     # Read files
-    compounds_dict = Compound.parse_file(imaging_profile, feature_names_file, feature_list)
+    compounds_dict = Compound.parse_file(imaging_profile, feature_names_file)
 
     # Get two compounds and print the requested dimensions and distance
     compound_one = compounds_dict["BRD-K98301999-001-01-1"]

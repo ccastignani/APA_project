@@ -76,13 +76,18 @@ class KDTree:
         min_values = node_data - d
         max_values = node_data + d
 
+        self_visited = False
+
         result_node_id = []
 
         node_queue = [(self.root,0)]
         while node_queue:
             current_node = node_queue.pop(0)
             if current_node[0] is not None:
-                data_current_node = node_data = self.data_dictionary[current_node[0].id].get_dimensions()
+                if node_id == current_node[0].id:
+                    self_visited = True
+                    print("VISITED!!!!!!")
+                data_current_node = self.data_dictionary[current_node[0].id].get_dimensions()
                 if (data_current_node >= min_values).all() and (data_current_node <= max_values).all():
                     nodes_to_add = [current_node[0].left_child, current_node[0].right_child]
                     distance_to_node = self.data_dictionary[node_id].distance(self.data_dictionary[current_node[0].id])
@@ -94,9 +99,21 @@ class KDTree:
                     if self.compare(max_values, data_current_node, current_node[1]) == "LEFT":
                         #Discard right path
                         nodes_to_add[1] = None
+                    if not self_visited:
+                        if self.compare(node_data, data_current_node, current_node[1]) == "RIGHT":
+                            nodes_to_add[1] = current_node[0].right_child
+                        else:
+                            nodes_to_add[0] = current_node[0].left_child
                     for child in nodes_to_add:
                         if child is not None:
                             node_queue.append((child, current_node[1]+1))
+
+                elif not self_visited:
+                    if self.compare(node_data, data_current_node, current_node[1]) == "RIGHT":
+                        node_queue.append((current_node[0].right_child, current_node[1]+1))
+                    else:
+                        node_queue.append((current_node[0].left_child, current_node[1]+1))
+                
         return result_node_id
 
     def compare(self, data_node_p, data_node_q, depth):
@@ -107,6 +124,6 @@ class KDTree:
         current_dimension = depth % k
 
         if data_node_p[current_dimension] < data_node_q[current_dimension]:
-            return "RIGTH"
-        return "LEFT"
+            return "LEFT"
+        return "RIGHT"
 
