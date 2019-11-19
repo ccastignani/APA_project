@@ -13,6 +13,7 @@ setup(
         "argparse",
         "numpy",
         "pytest",
+        "pytest-cov",
         "coverage"
     ],
     python_requires='>=3',
