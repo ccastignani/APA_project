@@ -1,9 +1,10 @@
 import numpy as np
 
+
 class Node:
     """ Node class of the kd tree """
-    
-    def __init__(self, id = None, left_child = None, right_child = None):
+
+    def __init__(self, id=None, left_child=None, right_child=None):
         """ Creator of a node """
         self.id = id
         self.left_child = left_child
@@ -126,17 +127,16 @@ class KDTree:
                         node_queue.append((current_node[0].right_child, current_node[1]+1))
                     else:
                         node_queue.append((current_node[0].left_child, current_node[1]+1))
-                
+
         return result_node_id
 
     def __compare(self, data_node_p, data_node_q, depth):
-        """ Method that returns child of node_q that belongs node_p """
-        # Length of dimensions minus 1, as we added the id as another dimension in the matrix
+        """ Method that returns child of node_q to that belongs node_p """
+        # Length of dimensions minus 1, as we added the id
+        # as another dimension in the matrix
         k = len(self.data_matrix[0])-1
         # Check the current dimension to be evaluated
         current_dimension = depth % k
-
         if data_node_p[current_dimension] < data_node_q[current_dimension]:
             return "LEFT"
         return "RIGHT"
-
