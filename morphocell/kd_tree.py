@@ -23,10 +23,8 @@ class KDTree:
         data_matrix = []
         for key, value in data_dictionary.items():
             row = value.get_dimensions()
-            # print(row)
             row = np.append(row, np.array(key))
             data_matrix.append(row)
-
         data_matrix = np.array(data_matrix)
         data_matrix = data_matrix.transpose()
         row_sum = data_matrix[:-1,].astype(float).sum(axis = 1) #skip last row, all the IDs
@@ -42,7 +40,7 @@ class KDTree:
     
         new_matrix = new_matrix.transpose()
 
-        return new_matrix
+        return new_matrix.tolist()
 
     def __build(self, data_matrix, depth=0):
         """ Recursive funtion to create the kd tree """
