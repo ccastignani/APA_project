@@ -13,6 +13,18 @@ The data source can be found here: https://www.broadinstitute.org/chembio-therap
 - Ljosa et al., 2013 Comparison of Methods for Image-Based Profiling of Cellular Morphological Responses to Small-Molecule Treatment
 - Wang et al., 2016 Drug-induced adverse events prediction with the LINCS L1000 data
 
+Usage
+=====
+
+Usage example:
+
+python morphocell.py    -i ../imaging.profiles.txt \
+                        -f ../imaging.feature.names.txt \
+                        -c BRD-A78877355-003-03-6 \
+                        -d 50 \
+                        -k 5 \
+                        -l Cells_AreaShape_EulerNumber Cells_AreaShape_Perimeter
+
 Authors
 =======
 

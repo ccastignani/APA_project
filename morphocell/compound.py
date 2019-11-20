@@ -26,13 +26,13 @@ class Compound:
         """ 'Interface method' to be compatible with kd tree """
         return self.get_features()
 
-    def get_features(self, feature_list=None):
+    def get_features(self, *feature_names):
         """ Method that returns the features listed in argv """
-        if feature_list is None or not feature_list:
+        if not feature_names:
             return self.feature_vector
         else:
             features_requested = []
-            for feature in feature_list:
+            for feature in feature_names:
                 try:
                     feature_index = Compound.feature_list.index(feature)
                     features_requested.append(self.feature_vector[feature_index])
@@ -45,23 +45,11 @@ class Compound:
         """ Return the distance among two compounds """
         # argv is a list of the names of the features which have to be used
         # for the calculation of the distance
-        return utils.euclidean_distance(self.get_features(argv), x.get_features(argv))
+        return utils.euclidean_distance(self.get_features(*argv), x.get_features(*argv))
 
     @staticmethod
-    def parse_file(imaging_profile, feature_names_file, feature_list = [
-            "Cells_AreaShape_Area", 
-            "Cells_AreaShape_Compactness", 
-            "Cells_AreaShape_Eccentricity", 
-            "Cells_AreaShape_Perimeter", 
-            "Cytoplasm_AreaShape_Area", 
-            "Cytoplasm_AreaShape_Eccentricity", 
-            "Cytoplasm_AreaShape_Perimeter", 
-            "Nuclei_AreaShape_Area", 
-            "Nuclei_AreaShape_Eccentricity", 
-            "Nuclei_AreaShape_Perimeter"
-            ]):
+    def parse_file(imaging_profile, feature_names_file, feature_list):
         """ Static method that returns a dictionary of compounds from a file """
-
         Compound.feature_list = feature_list
 
         f = open(feature_names_file, "r")
