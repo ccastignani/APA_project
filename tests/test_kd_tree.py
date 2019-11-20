@@ -5,6 +5,7 @@ import numpy as np
 from morphocell import kd_tree
 from morphocell import compound
 
+
 class TestKDTree(object):
     def test_nearest_neighbour(self):
         id1 = compound.Compound("ID-1", np.array([1,1,1]))
@@ -34,5 +35,4 @@ class TestKDTree(object):
         }
         tree = kd_tree.KDTree(init_dict)
 
-        assert tree.compare(id1.get_dimensions(), id5.get_dimensions(), 1) == "LEFT"
-
+        assert tree._KDTree__compare(id1.get_dimensions(), id5.get_dimensions(), 1) == "LEFT"
