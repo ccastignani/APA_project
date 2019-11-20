@@ -67,7 +67,7 @@ if __name__ == '__main__':
     print("===== reading imaging file =====")
     compounds_dict = Compound.parse_file(imaging_filename, feature_filename, feature_list)
     print("===== file readed succesfully =====")
-
+    
     print("=== creating KD Tree structure from imaging file ===")
     kd_tree = KDTree(compounds_dict)
     print("===== kd tree created succesfully =====")
