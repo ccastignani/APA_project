@@ -16,7 +16,6 @@ class KDTree:
         """ Creator of a kd tree from the given data_dictionary """
         self.data_dictionary = data_dictionary
         self.data_matrix = self.__create_data_matrix(data_dictionary)
-
         self.root = self.__build(self.data_matrix)
 
     def __create_data_matrix(self, data_dictionary):
@@ -26,7 +25,22 @@ class KDTree:
             row = value.get_dimensions()
             row = np.append(row, np.array(key))
             data_matrix.append(row)
-        return data_matrix
+        data_matrix = np.array(data_matrix)
+        data_matrix = data_matrix.transpose()
+        row_sum = data_matrix[:-1,].astype(float).sum(axis = 1) #skip last row, all the IDs
+        row_sum = np.append(row_sum, np.array(None)) #add one dimension more, for zip
+        new_matrix = np.zeros((data_matrix.shape))
+
+        for i, (row, row_sum) in enumerate(zip(data_matrix, row_sum)):
+            try:
+                new_matrix[i,:] = row.astype(float) / row_sum
+            except: #last row with IDs, do not normalize
+                new_matrix = np.row_stack([new_matrix[:-1,], row])
+        
+    
+        new_matrix = new_matrix.transpose()
+
+        return new_matrix.tolist()
 
     def __build(self, data_matrix, depth=0):
         """ Recursive funtion to create the kd tree """
