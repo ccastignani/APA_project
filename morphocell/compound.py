@@ -26,6 +26,10 @@ class Compound:
         """ 'Interface method' to be compatible with kd tree """
         return self.get_features()
 
+    def set_features(self,features):
+        """ 'Interface method' to be compatible with kd tree """
+        self.feature_vector = features
+
     def get_features(self, *feature_names):
         """ Method that returns the features listed in argv """
         if not feature_names:

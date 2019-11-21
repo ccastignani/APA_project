@@ -70,18 +70,26 @@ if __name__ == '__main__':
         "Nuclei_AreaShape_Perimeter"
         ]
 
-    print("===== reading imaging file =====")
-    compounds_dict = Compound.parse_file(imaging_filename, feature_filename, feature_list)
-    print("===== file readed succesfully =====")
-    
-    print("=== creating KD Tree structure from imaging file ===")
-    kd_tree = KDTree(compounds_dict)
-    print("===== kd tree created succesfully =====")
+    print("\n\n")
+    print("==================================")
+    print(" Cell Morphology Analysis Package")
+    print("==================================")
+    print("\n\n")
 
-    print("=== Group function over compound id ===")
+    print("===== Reading imaging file =====")
+    compounds_dict = Compound.parse_file(imaging_filename,
+                                         feature_filename, feature_list)
+    print("===== File readed succesfully =====")
+    print("===== Creating KD Tree structure from imaging file ====")
+    kd_tree = KDTree(compounds_dict, normalize_flag)
+    print("===== Kd tree created succesfully =====")
+    #kd_tree.print_tree()
+    print("==== Group function over compound id ====")
     selected_compound = compounds_dict[compound_id]
-    print("Compound selected for neighbour searches: %s - (%s)" %(selected_compound.broad_id, selected_compound.get_features()))
+    print("\n")
+    print("Compound selected for neighbour searches: %s - (%s)" % (selected_compound.broad_id, selected_compound.get_features()))
+    print("\n")
     print("Nearest neighbours:")
-    nearest_neighbour = kd_tree.group(selected_compound, distance, max_neighbours, *feature_list)
+    nearest_neighbour = kd_tree.group(selected_compound, distance, max_neighbours+1, *feature_list)
     for compound, distance in nearest_neighbour:
-        print("%s - %s, distance -> %s" %(compound.get_id(), compound.get_features(), distance))
+        print("%s - %s, distance -> %s" % (compound.get_id(), compound.get_features(), distance))

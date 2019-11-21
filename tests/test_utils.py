@@ -2,6 +2,7 @@ import pytest
 
 from morphocell import utils
 
+
 class TestUtils(object):
     def test_euclidean_distance(self):
         vector_a = [1, 1, 1]
