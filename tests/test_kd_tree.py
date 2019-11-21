@@ -7,7 +7,7 @@ from morphocell import compound
 
 
 class TestKDTree(object):
-    def test_nearest_neighbour(self):
+    def test_group(self):
         id1 = compound.Compound("ID-1", np.array([1,1,1]))
         id2 = compound.Compound("ID-2", np.array([1,1,2]))
         id3 = compound.Compound("ID-3", np.array([1,2,2]))
@@ -23,7 +23,7 @@ class TestKDTree(object):
         }
         tree = kd_tree.KDTree(init_dict)
 
-        #assert tree.group(id4,2, 2) == [id3, id2]
+        assert tree.group(id4,2, 2) == [(id4, 0), (id3, 1)]
 
     def test_compare(self):
         id1 = compound.Compound("ID-1", np.array([1,1,1]))
