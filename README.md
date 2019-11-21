@@ -16,14 +16,40 @@ The data source can be found here: https://www.broadinstitute.org/chembio-therap
 Usage
 =====
 
-Usage example:
+### Quick Start
 
-python morphocell.py    -i ../imaging.profiles.txt \
-                        -f ../imaging.feature.names.txt \
-                        -c BRD-A78877355-003-03-6 \
-                        -d 50 \
-                        -k 5 \
-                        -l Cells_AreaShape_EulerNumber Cells_AreaShape_Perimeter
+#### Inputs 
+
+```
+-i  Imaging profiles file (REQUIRED)
+-f  Feature names file (REQUIRED)
+-c  Compound ID to which the distances should be calculated
+-d  Distance threshold
+-k  Number of max Nearest Neighbours
+-l  Features to be used
+--normalize
+```
+You can find small examples on how the required files should look like in the test folder. 
+
+The specified compund ID is the compound for which the k-nearest neighbours are found.
+
+You can add as many feature names as you wish after the -l parameter. These features will be the ones used for both the construction of the KD tree as well as the k-nearest neighbour search.
+
+If the normalize option is selected, feature values will be normalized before constructing the KD tree. The normalization procedure consists in deviding each value by the sum of the values of that feature for all the compounds.
+
+
+#### Example
+Here a quick example you can run on the test data we provided: 
+```
+python3 morphocell.py -i tests/test_data/profiles.txt 
+                      -f tests/test_data/features.txt 
+                      -c BRD-K05686172-001-01-6 
+                      -d 50  
+                      -k 10 
+                      -l Cells_AreaShape_EulerNumber Cells_AreaShape_Perimeter 
+                      --normalize
+```
+
 
 Authors
 =======
