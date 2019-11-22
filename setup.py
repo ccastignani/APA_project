@@ -5,7 +5,7 @@ setup(
     version='0.1.0',
     description='A nearest neighbour search for morphological image files',
     keywords='cell-image kd-tree morphology',
-    packages=['morphocell', 'morphocell.test'],
+    packages=['morphocell'],
     scripts=['bin/morphocell'],
     license='GNU GPLv3',
     long_description=open('README.md').read(),

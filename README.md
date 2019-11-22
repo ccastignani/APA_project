@@ -13,6 +13,33 @@ The data source can be found here: https://www.broadinstitute.org/chembio-therap
 - Ljosa et al., 2013 Comparison of Methods for Image-Based Profiling of Cellular Morphological Responses to Small-Molecule Treatment
 - Wang et al., 2016 Drug-induced adverse events prediction with the LINCS L1000 data
 
+Our Strategy
+============
+
+We thought to tackle the problem in a way that the user can re-use our code as a package. With this idea in mind, we wanted to create a reusable kd tree, and after some thinking and research, we found a way to create a kd tree that is reusable (is not modified when retrieving neighbors) and very fast. The inconvenience is that if we look for the k the nearest neighbors, we won't get the real k nearest neighbors, but instead we would get a very good approximation of those.
+
+Once the tree is build, our strategy is to prune for branches that are out of the scope from the search (that the node is inside the area of our target, or in other words, every dimension of the node is inside every dimension ± the distance of the target). 
+
+Installation
+============
+
+The easiest way to install morphocell is to download the repo and install via setup.py with:
+
+    python setup.py install
+
+Alternaively, if you don't want to install anything, you can move the script located inside bin folder, to the root of the project and execute it from there.
+
+Tests
+=====
+
+Test are implemented using `pytest` and `pytest-cov` packages. So to run test simply call:
+
+    /path/to/project/morphocell pytest
+
+And to view the coverage: 
+
+    /path/to/project/morphocell pytest --cov=morphocell tests/
+
 Usage
 =====
 
@@ -41,13 +68,13 @@ If the normalize option is selected, feature values will be normalized before co
 #### Example
 Here a quick example you can run on the test data we provided: 
 ```
-python3 morphocell.py -i tests/test_data/profiles.txt 
-                      -f tests/test_data/features.txt 
-                      -c BRD-K05686172-001-01-6 
-                      -d 50  
-                      -k 10 
-                      -l Cells_AreaShape_EulerNumber Cells_AreaShape_Perimeter 
-                      --normalize
+morphocell  -i /path/to/pdb/folder/profiles.txt 
+            -f /path/to/pdb/folder/features.txt 
+            -c BRD-K05686172-001-01-6 
+            -d 50  
+            -k 10 
+            -l Cells_AreaShape_EulerNumber Cells_AreaShape_Perimeter 
+            --normalize
 ```
 
 
