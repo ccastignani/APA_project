@@ -83,7 +83,7 @@ if __name__ == '__main__':
     print("===== Creating KD Tree structure from imaging file ====")
     kd_tree = KDTree(compounds_dict, normalize_flag)
     print("===== Kd tree created succesfully =====")
-    #kd_tree.print_tree()
+    kd_tree.print_tree()
     print("==== Group function over compound id ====")
     selected_compound = compounds_dict[compound_id]
     print("\n")
