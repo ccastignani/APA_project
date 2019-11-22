@@ -8,7 +8,7 @@ from morphocell.kd_tree import KDTree
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description="This programs do an aproximate neighbour search of an imagin file unsing a KD tree structure.")
+        description="This programs does an aproximate neighbour search of an imaging file using a KD-tree structure.")
     parser.add_argument('-i', '--imaging_profile',
                         dest="imaging_profile",
                         action="store",
