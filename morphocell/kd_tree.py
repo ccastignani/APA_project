@@ -61,6 +61,7 @@ class KDTree:
 
         # Length of dimensions minus 1, as we added the id as another dimension in the matrix
         k = len(data_matrix[0])-1
+
         # Check the current dimension to be evaluated
         current_dimension = depth % k
 
