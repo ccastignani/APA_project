@@ -30,7 +30,6 @@ class KDTree:
 
         # Normalize if needed and return
         if not normalize:
-            print(data_matrix)
             return data_matrix
         else:
             data_matrix = np.array(data_matrix)
